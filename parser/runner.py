@@ -6,6 +6,7 @@ from parser.parser_base import ParserBase
 # Каждый класс парсинга необходимо импортировать: {
 from parser.amazon import Amazon
 from parser.iherb import Iherb
+from parser.rei import Rei
 # }
 
 
