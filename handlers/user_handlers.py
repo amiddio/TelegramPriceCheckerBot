@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart, Command, Text
 from aiogram.types import Message, CallbackQuery
 from config_data.chat import save_chat_id
 from lexicon.lexicon import LEXICON_GENERAL_RU
+from logger.logger import log
 from models.link_orm import LinkOrm
 from parser.runner import run, get_message
 
@@ -27,12 +28,15 @@ async def process_help_command(message: Message):
 # Catch the command '/parse'
 @router.message(Command(commands='parse'))
 async def process_parse_command(message: Message):
-    links: list[LinkOrm] = run()
-    if links:
-        for link in links:
-            await message.answer(text=get_message(link))
-    else:
-        await message.answer(text=LEXICON_GENERAL_RU["products not changed"])
+    try:
+        links: list[LinkOrm] = run()
+        if links:
+            for link in links:
+                await message.answer(text=get_message(link))
+        else:
+            await message.answer(text=LEXICON_GENERAL_RU["products not changed"])
+    except (AttributeError, Exception) as e:
+        log().error(str(e))
 
 
 @router.message()

@@ -9,6 +9,7 @@ from widgets._state import State
 
 
 class LinkForm:
+    _state = None
 
     def __init__(self, master: tk, state: State = None) -> None:
         super().__init__()

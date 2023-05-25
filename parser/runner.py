@@ -29,8 +29,19 @@ def run() -> list[LinkOrm]:
         # Определяем класс для парсинга
         klass = _get_class_name(item.url)
         if klass:
+
+            # Если название продукта пустое пробуем его пропарсить и сохранить
+            if not item.title:
+                title = globals()[klass]().parse_title(item.url)
+                if title:
+                    item.title = title
+                    LinkModel(item).save()
+
             # Парсим продукт и получаем цену
             price = globals()[klass]().parse(item.url)
+            # Если продукт недоступен при первом парсинге переходим к другому элементу
+            if not price and not item.value:
+                continue
             # Если цена изменилась добавляем продукт в список
             # и сохраняем изменения в модели
             if price != item.value:
@@ -39,7 +50,7 @@ def run() -> list[LinkOrm]:
                 result.append(item)
                 LinkModel(item).save()
         else:
-            raise AttributeError(LEXICON_GENERAL_RU["parser class not found"].format(url=item['url']))
+            raise AttributeError(LEXICON_GENERAL_RU["parser class not found"].format(url=item.url))
     return result
 
 
@@ -51,9 +62,10 @@ def get_message(link: LinkOrm) -> str:
     :return: str
     """
 
+    title = f"<b>{link.title}</b>\n" if link.title else ''
     v = f"{link.value}" if link.value else LEXICON_GENERAL_RU["not available"]
     pv = f"{link.prev_value}" if link.prev_value else LEXICON_GENERAL_RU["not available"]
-    return LEXICON_GENERAL_RU["product changed"].format(prev=pv, curr=v, link=link.url)
+    return LEXICON_GENERAL_RU["product changed"].format(title=title, prev=pv, curr=v, link=link.url)
 
 
 def _get_class_name(url: str) -> str | None:

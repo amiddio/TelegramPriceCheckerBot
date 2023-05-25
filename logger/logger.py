@@ -9,6 +9,7 @@ def log() -> logging:
     logging.basicConfig(filename=_LOG_INFO,
                         format=format_str,
                         datefmt='%Y-%m-%d %H:%M:%S',
+                        encoding='utf-8',
                         level=logging.INFO)
     return logging
 

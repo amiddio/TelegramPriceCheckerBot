@@ -22,3 +22,7 @@ class ParserBase(ABC):
     @abstractmethod
     def parse(self, url: str) -> str | None:
         pass
+
+    @abstractmethod
+    def parse_title(self, url: str) -> str | None:
+        pass

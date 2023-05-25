@@ -10,6 +10,8 @@ class Config(BaseSettings):
     window_width_min: int
     window_height_min: int
     window_resizable: bool
+    browser_name: str
+    browser_path: str
 
     class Config:
         env_file = '.env'

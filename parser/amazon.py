@@ -11,7 +11,7 @@ class Amazon(ParserBase):
 
     def parse(self, url: str) -> str | None:
         """
-        Метод парсинга класса
+        Парсим цену продукта
 
         :param url: str
         :return: str | None
@@ -26,6 +26,22 @@ class Amazon(ParserBase):
             price = Amazon._get_price(soup=soup, css_id=css_id, css_class=css_class)
             if price:
                 return price.strip()
+
+    def parse_title(self, url: str) -> str | None:
+        """
+        Парсим название продукта
+
+        :param url: str
+        :return: str | None
+        """
+
+        soup: BeautifulSoup = self.get_html_parser(url)
+        if not soup:
+            return
+
+        res = soup.find('span', id='productTitle')
+        if res:
+            return res.text.strip()
 
     @staticmethod
     def _get_price(soup, css_id, css_class) -> str | None:

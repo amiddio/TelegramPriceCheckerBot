@@ -7,6 +7,7 @@ class LinkOrm(Base):
     __tablename__ = 'links'
     id = Column(Integer, name='id', nullable=False, unique=True, primary_key=True, autoincrement=True)
     url = Column(String(1000), name='url', nullable=False)
+    title = Column(String(1000), name='title')
     value = Column(String(100), name='value')
     prev_value = Column(String(100), name='prev_value')
     is_active = Column(Boolean, name='is_active', default=True)

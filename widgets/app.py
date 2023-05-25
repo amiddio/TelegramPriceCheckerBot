@@ -39,6 +39,9 @@ class App(tk.Tk):
         # set resizable window
         self.resizable(config.window_resizable, config.window_resizable)
 
+        # set ico
+        self.iconbitmap(r'./app.ico')
+
         # styling widgets
         style = ttk.Style()
         style.theme_use('clam')
@@ -123,7 +126,7 @@ class App(tk.Tk):
 
         # Define headings and columns
         for i, item in enumerate(columns, 1):
-            treeview.column(f"# {i}", width=30 if i > 1 else 500)
+            treeview.column(f"# {i}", width=30 if i > 1 else 150)
             treeview.heading(item, text=item.capitalize(), anchor='w')
 
         # Display widget
