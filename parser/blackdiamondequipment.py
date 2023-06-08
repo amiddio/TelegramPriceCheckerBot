@@ -32,6 +32,6 @@ class Blackdiamondequipment(ParserBase):
         if not soup:
             return
 
-        res = soup.find('h1', id='product-title')
+        res = soup.find('h1', class_='product-title')
         if res:
             return res.text.strip()
