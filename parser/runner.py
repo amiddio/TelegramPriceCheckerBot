@@ -47,12 +47,10 @@ def run() -> list[LinkOrm]:
             # Если цена изменилась добавляем продукт в список
             # и сохраняем изменения в модели
             if price != item.value:
-                # Сравниваем цены. Если разница меньше 1 то игнорируем изменения
-                if _get_prices_diff(price, item.value):
-                    item.prev_value = item.value
-                    item.value = price
-                    result.append(item)
-                    LinkModel(item).save()
+                item.prev_value = item.value
+                item.value = price
+                result.append(item)
+                LinkModel(item).save()
         else:
             raise AttributeError(LEXICON_GENERAL_RU["parser class not found"].format(url=item.url))
     return result
@@ -95,18 +93,3 @@ def _get_class_name(url: str) -> str | None:
         if klass.__name__.lower() in domain_splited:
             return klass.__name__
     return
-
-
-def _get_prices_diff(price1, price2):
-    def get_num(n):
-        return re.search(r"(\d+.?\d+)", n)
-
-    # Находим цены в строках
-    p1 = get_num(price1)
-    p2 = get_num(price2)
-    if p1 and p2:
-        p1 = float(p1.group())
-        p2 = float(p2.group())
-        res = abs(p1 - p2)  # Получаем абсолютную разницу
-        return True if res > 1 else False  # Если разница меньше 1 то игнорим
-    return True
